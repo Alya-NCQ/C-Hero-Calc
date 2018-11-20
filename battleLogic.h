@@ -247,6 +247,7 @@ inline void ArmyCondition::getDamage(const int turncounter, const ArmyCondition 
                         turnData.counter_target = tempArmy.findMaxHP() - opposingCondition.monstersLost;
                         break;
         case EXECUTE:   turnData.execute = skillAmounts[monstersLost];
+                        break;
         default:        break;
 
     }
@@ -322,7 +323,7 @@ inline void ArmyCondition::resolveDamage(TurnData & opposing) {
         remainingHealths[frontliner + 1] -= opposing.valkyrieDamage;
     }
 
-    if (opposing.execute && (remainingHealths[frontliner] / maxHealths[frontliner] < opposing.execute)) {
+    if (opposing.execute && !worldboss && (remainingHealths[frontliner] / maxHealths[frontliner] < opposing.execute)) {
         remainingHealths[frontliner] = 0;
     }
 

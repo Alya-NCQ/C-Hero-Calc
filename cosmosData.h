@@ -14,7 +14,7 @@
 #include <fstream>
 
 // Version number not used anywhere except in output to know immediately which version the user is running
-const std::string VERSION = "3.2.0.4a";
+const std::string VERSION = "3.2.0.4c";
 
 const size_t GIGABYTE = ((size_t) (1) << 30);
 
@@ -90,7 +90,7 @@ enum SkillType {
     LEECH,         // Heals based on damage dealt
     EVOLVE,        // Gains attack from damage taken
 
-    COUNTER_MAX_HP, // Reflects damage to the enemy with most HP
+    COUNTER_MAX_HP,// Reflects damage to the enemy with most HP
 
     EXECUTE        // After they hit an enemy, if the enemy is below X% HP, the enemy will die.
 };
