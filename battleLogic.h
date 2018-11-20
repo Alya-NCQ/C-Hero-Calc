@@ -247,6 +247,7 @@ inline void ArmyCondition::getDamage(const int turncounter, const ArmyCondition 
                         turnData.counter_target = tempArmy.findMaxHP() - opposingCondition.monstersLost;
                         break;
         case EXECUTE:   turnData.execute = skillAmounts[monstersLost];
+                        break;
         default:        break;
 
     }
