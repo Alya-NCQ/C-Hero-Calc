@@ -32,6 +32,7 @@ struct TurnData {
     double critMult = 1;
     double hate = 0;
     double leech = 0;
+    double execute = 0;
     bool immunity5K = false ;
 };
 
@@ -194,6 +195,7 @@ inline void ArmyCondition::getDamage(const int turncounter, const ArmyCondition 
     turnData.counter = 0;
     turnData.direct_target = 0;
     turnData.leech = 0;
+    turnData.execute = 0;
 
     double friendsDamage = 0;
 
@@ -242,8 +244,9 @@ inline void ArmyCondition::getDamage(const int turncounter, const ArmyCondition 
                         break;
         case COUNTER_MAX_HP: turnData.counter = skillAmounts[monstersLost];
                         tempArmy = opposingCondition;
-                        turnData.counter_target = tempArmy.findMaxHP();
+                        turnData.counter_target = tempArmy.findMaxHP() - opposingCondition.monstersLost;
                         break;
+        case EXECUTE:   turnData.execute = skillAmounts[monstersLost];
         default:        break;
 
     }
@@ -317,6 +320,10 @@ inline void ArmyCondition::resolveDamage(TurnData & opposing) {
 
     if (opposing.trampleTriggered && armySize > frontliner + 1) {
         remainingHealths[frontliner + 1] -= opposing.valkyrieDamage;
+    }
+
+    if (opposing.execute && (remainingHealths[frontliner] / maxHealths[frontliner] < opposing.execute)) {
+        remainingHealths[frontliner] = 0;
     }
 
     if (opposing.explodeDamage != 0 && remainingHealths[frontliner] <= 0 && !worldboss) {
@@ -414,14 +421,12 @@ inline bool simulateFight(Army & left, Army & right, bool verbose = false) {
         // Apply Leprechaun's skill (Beer)
         if (leftCondition.booze && leftCondition.armySize < rightCondition.armySize)
             for (size_t i = 0; i < ARMY_MAX_SIZE; ++i) {
-                rightCondition.maxHealths[i] = int(rightCondition.maxHealths[i] * leftCondition.armySize / rightCondition.armySize);
-                rightCondition.remainingHealths[i] = rightCondition.maxHealths[i];
+                rightCondition.remainingHealths[i] = int(rightCondition.maxHealths[i] * leftCondition.armySize / rightCondition.armySize);
             }
 
         if (rightCondition.booze && rightCondition.armySize < leftCondition.armySize)
             for (size_t i = 0; i < ARMY_MAX_SIZE; ++i) {
-                leftCondition.maxHealths[i] = int(leftCondition.maxHealths[i] * rightCondition.armySize / leftCondition.armySize);
-                leftCondition.remainingHealths[i] = leftCondition.maxHealths[i];
+                leftCondition.remainingHealths[i] = int(leftCondition.maxHealths[i] * rightCondition.armySize / leftCondition.armySize);
             }
 
         // Reset Potential values in fightresults

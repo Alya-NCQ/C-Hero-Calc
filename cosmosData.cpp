@@ -254,6 +254,7 @@ std::map<std::string, int> stringToEnum = {
     {"LEECH", LEECH},
     {"EVOLVE", EVOLVE},
     {"COUNTER_MAX_HP", COUNTER_MAX_HP},
+    {"EXECUTE", EXECUTE},
 
     {"EARTH", EARTH},
     {"AIR", AIR},
