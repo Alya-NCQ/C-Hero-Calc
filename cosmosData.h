@@ -14,7 +14,7 @@
 #include <fstream>
 
 // Version number not used anywhere except in output to know immediately which version the user is running
-const std::string VERSION = "3.2.0.4c";
+const std::string VERSION = "3.2.0.5a";
 
 const size_t GIGABYTE = ((size_t) (1) << 30);
 
@@ -262,7 +262,7 @@ class Army {
             // Any empty spaces are considered to be contiguous and frontmost as they are in DQ and quests
             int64_t newSeed = 1;
             for (int i = monsterAmount - 1; i >= 0; i--) {
-                newSeed = newSeed * abs(monsterReference[monsters[i]].index) + 1;
+                newSeed = (newSeed * abs(monsterReference[monsters[i]].index) + 1) % 2147483647;
             }
             // Simplification of loop for empty monsters (id: -1) contiguous and frontmost
             newSeed += 6 - monsterAmount;

@@ -71,7 +71,9 @@ class ArmyCondition {
         inline void getDamage(const int turncounter, const ArmyCondition & opposingCondition);
         inline void resolveDamage(TurnData & opposing);
         inline int64_t getTurnSeed(int64_t seed, int turncounter) {
-            return (seed + (101 - turncounter)*(101 - turncounter)*(101 - turncounter)) % (int64_t)round((double)seed / (101 - turncounter) + (101 - turncounter)*(101 - turncounter));
+            for (int i = 0; i < turncounter; ++i)
+                seed = (16807 * seed) % 2147483647;
+            return seed;
         }
         inline int findMaxHP();
 };
@@ -233,7 +235,7 @@ inline void ArmyCondition::getDamage(const int turncounter, const ArmyCondition 
         // Pick a target, Bubbles currently dampens lux damage if not targeting first according to game code, interaction should be added if this doesn't change
         case LUX:       turnData.direct_target = getTurnSeed(opposingCondition.seed, turncounter) % (opposingCondition.armySize - opposingCondition.monstersLost);
                         break;
-        case CRIT:      turnData.critMult *= getTurnSeed(opposingCondition.seed, turncounter) % 2 == 1 ? skillAmounts[monstersLost] : 1;
+        case CRIT:      turnData.critMult *= getTurnSeed(opposingCondition.seed, 99 - turncounter) % 2 == 0 ? skillAmounts[monstersLost] : 1;
                         break;
         case HATE:      turnData.hate = skillAmounts[monstersLost];
                         break;
